@@ -1,4 +1,4 @@
-import type { HashingService } from '@/domain/user-management/enterprise/services/hashing-service'
+import type { HashingService } from '@/core/services/hashing-service'
 
 export class MockHashingService implements HashingService {
 	hash(password: string): string {
