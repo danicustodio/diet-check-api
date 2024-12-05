@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://unform.dev">
-    <img src="./logo.png" width="200" height="141"  alt="Diet Check API">
+    <img src="./docs/logo.png" width="200" height="141"  alt="Diet Check API">
   </a>
 </p>
 
@@ -22,7 +22,7 @@
 - 🍽️ Meal Tracking: log your daily meals and track your diet progress.
 - ✏️ Meal Management: edit, update, or delete meals entries.
 - 📜 Meal History: view a list of all meals logged.
-- 📊 Diet Metrics: track meals within and outside the diet and monitor diet progress with the “Longest Streak” metric.
+- 📊 Diet Metrics: track meals within and outside the diet and monitor diet progress with the "Longest Streak" metric.
 
 
 
