@@ -2,7 +2,7 @@ import { Entity } from '@/core/entities/entity'
 import type { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ShortLengthError } from '@/core/errors/short-length-error'
 
-interface MealProps {
+export interface MealProps {
 	name: string
 	description?: string | null
 	datetime: Date

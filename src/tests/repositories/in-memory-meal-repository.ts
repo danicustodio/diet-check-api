@@ -5,7 +5,7 @@ export class InMemoryMealRepository implements MealRepository {
 	private meals: Meal[] = []
 
 	async findAll(accountId: string): Promise<Meal[]> {
-		return this.meals.filter((meal) => meal.accountId === accountId)
+		return this.meals.filter((meal) => meal.accountId.toString() === accountId)
 	}
 
 	async findById(id: string): Promise<Meal | null> {
