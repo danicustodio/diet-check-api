@@ -8,8 +8,13 @@ export class InMemoryMealRepository implements MealRepository {
 		return this.meals.filter((meal) => meal.accountId.toString() === accountId)
 	}
 
-	async findById(id: string): Promise<Meal | null> {
-		return this.meals.find((meal) => meal.id.toString() === id) ?? null
+	async findById(id: string, accountId: string): Promise<Meal | null> {
+		return (
+			this.meals.find(
+				(meal) =>
+					meal.id.toString() === id && meal.accountId.toString() === accountId
+			) ?? null
+		)
 	}
 
 	async create(meal: Meal): Promise<void> {
