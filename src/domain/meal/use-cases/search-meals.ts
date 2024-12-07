@@ -18,7 +18,7 @@ export class SearchMealsUseCase {
 		mealId,
 	}: SearchMealsUseCaseRequest): Promise<SearchMealsUseCaseResponse> {
 		if (mealId) {
-			const meals = await this.mealRepository.findById(mealId)
+			const meals = await this.mealRepository.findById(mealId, accountId)
 			if (!meals) {
 				return left(new ResourceNotFoundError('Meal not found'))
 			}

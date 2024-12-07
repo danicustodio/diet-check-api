@@ -8,11 +8,11 @@ import { SearchMealsUseCase } from './search-meals'
 
 describe('Search Meals Use Case', () => {
 	let mealRepository: InMemoryMealRepository
-	let searchMealsUseCase: SearchMealsUseCase
+	let sut: SearchMealsUseCase
 
 	beforeEach(() => {
 		mealRepository = new InMemoryMealRepository()
-		searchMealsUseCase = new SearchMealsUseCase(mealRepository)
+		sut = new SearchMealsUseCase(mealRepository)
 	})
 
 	it('should return a list with all meals of a user', async () => {
@@ -22,7 +22,7 @@ describe('Search Meals Use Case', () => {
 		mealRepository.create(meals[0])
 		mealRepository.create(meals[1])
 
-		const result = await searchMealsUseCase.execute({
+		const result = await sut.execute({
 			accountId: accountId.toString(),
 		})
 
@@ -38,7 +38,7 @@ describe('Search Meals Use Case', () => {
 	it('should return an empty list if no meals are found', async () => {
 		const accountId = new UniqueEntityID(randomUUID())
 
-		const result = await searchMealsUseCase.execute({
+		const result = await sut.execute({
 			accountId: accountId.toString(),
 		})
 
@@ -58,7 +58,7 @@ describe('Search Meals Use Case', () => {
 		mealRepository.create(mockMeals[0])
 		mealRepository.create(mockMeals[1])
 
-		const result = await searchMealsUseCase.execute({
+		const result = await sut.execute({
 			accountId: accountId.toString(),
 			mealId: mockMeals[0].id.toString(),
 		})
@@ -76,7 +76,7 @@ describe('Search Meals Use Case', () => {
 		mealRepository.create(mockMeals[0])
 		mealRepository.create(mockMeals[1])
 
-		const result = await searchMealsUseCase.execute({
+		const result = await sut.execute({
 			accountId: accountId.toString(),
 			mealId: new UniqueEntityID(randomUUID()).toString(),
 		})
