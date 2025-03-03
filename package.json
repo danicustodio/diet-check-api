@@ -17,7 +17,12 @@
     "type": "git",
     "url": "git+https://github.com/DaniCustodio/diet-check-api.git"
   },
-  "keywords": ["node", "express", "diet", "api"],
+  "keywords": [
+    "node",
+    "express",
+    "diet",
+    "api"
+  ],
   "author": "Dani Custodio",
   "license": "ISC",
   "bugs": {
@@ -28,6 +33,7 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.0.6",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
