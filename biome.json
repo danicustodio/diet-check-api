@@ -30,6 +30,9 @@
       "semicolons": "asNeeded",
       "arrowParentheses": "asNeeded",
       "trailingCommas": "es5"
+    },
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
     }
   }
 }
