@@ -18,6 +18,7 @@ import {
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
 } from '@nestjs/swagger'
+import { hash } from 'bcryptjs'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { CreateAccountDTO, createAccountSchema } from './create-account.dto'
 
@@ -36,9 +37,13 @@ export class CreateAccountController {
   async handle(@Body() createAccountDto: CreateAccountDTO) {
     const { name, email, password } = createAccountDto
 
-    // TODO: Hash password
+    const hashedPassword = await hash(password, 8)
 
-    const result = await this.createAccount.execute({ name, email, password })
+    const result = await this.createAccount.execute({
+      name,
+      email,
+      password: hashedPassword,
+    })
 
     if (isRight(result)) {
       return {
@@ -54,7 +59,6 @@ export class CreateAccountController {
         })
       case 'InvalidNameError':
       case 'InvalidEmailError':
-      case 'InvalidPasswordError':
         throw new BadRequestException({
           message: `${error.message}`,
         })

@@ -1,13 +1,8 @@
 import { type Either, makeLeft, makeRight } from '@/core/either'
-import type {
-  InvalidEmailError,
-  InvalidNameError,
-  InvalidPasswordError,
-} from '@/core/errors'
+import type { InvalidEmailError, InvalidNameError } from '@/core/errors'
 import { DuplicatedResourceError } from '@/core/errors/duplicated-resource-error'
 import { Account } from '../entities/account'
 import { Email } from '../entities/value-objects/email'
-import { Password } from '../entities/value-objects/password'
 import type { AccountRepository } from '../repositories/account-repository'
 
 interface AccountUseCaseRequest {
@@ -17,10 +12,7 @@ interface AccountUseCaseRequest {
 }
 
 type AccountUseCaseResponse = Either<
-  | DuplicatedResourceError
-  | InvalidNameError
-  | InvalidEmailError
-  | InvalidPasswordError,
+  DuplicatedResourceError | InvalidNameError | InvalidEmailError,
   {
     account: Account
   }
@@ -43,7 +35,7 @@ export class CreateAccountUseCase {
       const account = Account.create({
         email: new Email(email),
         name,
-        password: new Password(password),
+        password,
       })
 
       await this.accountRepository.create(account)

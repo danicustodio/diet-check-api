@@ -1,9 +1,5 @@
 import { isLeft, isRight, unwrapEither } from '@/core/either'
-import {
-  InvalidEmailError,
-  InvalidNameError,
-  InvalidPasswordError,
-} from '@/core/errors'
+import { InvalidEmailError, InvalidNameError } from '@/core/errors'
 import { DuplicatedResourceError } from '@/core/errors/duplicated-resource-error'
 import { makeAccount } from '@/tests/factories/make-account'
 import { InMemoryAccountRepository } from '@/tests/repositories/in-memory-account-repository'
@@ -73,97 +69,6 @@ describe('Create Account Use Case:', () => {
     expect(isLeft(result)).toBe(true)
     if (isLeft(result)) {
       expect(unwrapEither(result)).toBeInstanceOf(InvalidNameError)
-    }
-  })
-
-  it('should throw an error if the password is too short', async () => {
-    const result = await sut.execute({
-      email: 'test@example.com',
-      name: 'Test User',
-      password: 'Test',
-    })
-
-    expect(isLeft(result)).toBe(true)
-    if (isLeft(result)) {
-      expect(unwrapEither(result)).toBeInstanceOf(InvalidPasswordError)
-    }
-  })
-
-  it('should throw an error if the password is too long', async () => {
-    const result = await sut.execute({
-      email: 'test@example.com',
-      name: 'Test User',
-      password: 'Test!123456789012',
-    })
-
-    expect(isLeft(result)).toBe(true)
-    if (isLeft(result)) {
-      expect(unwrapEither(result)).toBeInstanceOf(InvalidPasswordError)
-    }
-  })
-
-  it('should throw an error if the password does not contain a number', async () => {
-    const result = await sut.execute({
-      email: 'test@example.com',
-      name: 'Test User',
-      password: 'TestTestTest!',
-    })
-
-    expect(isLeft(result)).toBe(true)
-    if (isLeft(result)) {
-      expect(unwrapEither(result)).toBeInstanceOf(InvalidPasswordError)
-    }
-  })
-
-  it('should throw an error if the password does not contain an uppercase letter', async () => {
-    const result = await sut.execute({
-      email: 'test@example.com',
-      name: 'Test User',
-      password: 'test!123',
-    })
-
-    expect(isLeft(result)).toBe(true)
-    if (isLeft(result)) {
-      expect(unwrapEither(result)).toBeInstanceOf(InvalidPasswordError)
-    }
-  })
-
-  it('should throw an error if the password does not contain a lowercase letter', async () => {
-    const result = await sut.execute({
-      email: 'test@example.com',
-      name: 'Test User',
-      password: 'TEST!123',
-    })
-
-    expect(isLeft(result)).toBe(true)
-    if (isLeft(result)) {
-      expect(unwrapEither(result)).toBeInstanceOf(InvalidPasswordError)
-    }
-  })
-
-  it('should throw an error if the password does not contain a special character', async () => {
-    const result = await sut.execute({
-      email: 'test@example.com',
-      name: 'Test User',
-      password: 'Test123',
-    })
-
-    expect(isLeft(result)).toBe(true)
-    if (isLeft(result)) {
-      expect(unwrapEither(result)).toBeInstanceOf(InvalidPasswordError)
-    }
-  })
-
-  it('should throw an error if the password contains spaces or tabs', async () => {
-    const result = await sut.execute({
-      email: 'test@example.com',
-      name: 'Test User',
-      password: 'Test! 123',
-    })
-
-    expect(isLeft(result)).toBe(true)
-    if (isLeft(result)) {
-      expect(unwrapEither(result)).toBeInstanceOf(InvalidPasswordError)
     }
   })
 })
