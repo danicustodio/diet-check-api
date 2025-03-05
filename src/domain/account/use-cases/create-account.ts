@@ -1,5 +1,9 @@
 import { type Either, makeLeft, makeRight } from '@/core/either'
-import { EntityError } from '@/core/errors'
+import type {
+  InvalidEmailError,
+  InvalidNameError,
+  InvalidPasswordError,
+} from '@/core/errors'
 import { DuplicatedResourceError } from '@/core/errors/duplicated-resource-error'
 import { Account } from '../entities/account'
 import { Email } from '../entities/value-objects/email'
@@ -13,14 +17,17 @@ interface AccountUseCaseRequest {
 }
 
 type AccountUseCaseResponse = Either<
-  DuplicatedResourceError | EntityError | Error,
+  | DuplicatedResourceError
+  | InvalidNameError
+  | InvalidEmailError
+  | InvalidPasswordError,
   {
     account: Account
   }
 >
 
 export class CreateAccountUseCase {
-  constructor(private readonly accountRepository: AccountRepository) {}
+  constructor(private accountRepository: AccountRepository) {}
 
   async execute({
     email,
@@ -43,10 +50,6 @@ export class CreateAccountUseCase {
 
       return makeRight({ account })
     } catch (error) {
-      if (error instanceof EntityError) {
-        return makeLeft(error)
-      }
-
       const typedError = error as Error
       return makeLeft(typedError)
     }
