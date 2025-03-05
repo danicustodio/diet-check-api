@@ -1,25 +1,32 @@
 import { describe, expect, it } from 'vitest'
-import { type Either, left, right } from './either'
+import {
+  type Either,
+  isLeft,
+  isRight,
+  makeLeft,
+  makeRight,
+  unwrapEither,
+} from './either'
 
 describe('Either', () => {
   it('should return a success value', () => {
     const result = doSomeOperation(true)
-    expect(result.isRight()).toBe(true)
-    expect(result.value).toBe(16)
-    expect(result.isLeft()).toBe(false)
+    expect(isRight(result)).toBe(true)
+    expect(unwrapEither(result)).toBe(16)
+    expect(isLeft(result)).toBe(false)
   })
   it('should return a failure value', () => {
     const result = doSomeOperation(false)
-    expect(result.isRight()).toBe(false)
-    expect(result.value).toBe('Failed to complete operation')
-    expect(result.isLeft()).toBe(true)
+    expect(isRight(result)).toBe(false)
+    expect(unwrapEither(result)).toBe('Failed to complete operation')
+    expect(isLeft(result)).toBe(true)
   })
 })
 
 function doSomeOperation(shouldSucceed: boolean): Either<string, number> {
   if (shouldSucceed) {
-    return right(16)
+    return makeRight(16)
   }
 
-  return left('Failed to complete operation')
+  return makeLeft('Failed to complete operation')
 }
