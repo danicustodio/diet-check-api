@@ -17,12 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/DaniCustodio/diet-check-api.git"
   },
-  "keywords": [
-    "node",
-    "express",
-    "diet",
-    "api"
-  ],
+  "keywords": ["node", "express", "diet", "api"],
   "author": "Dani Custodio",
   "license": "ISC",
   "bugs": {
@@ -30,10 +25,13 @@
   },
   "homepage": "https://github.com/DaniCustodio/diet-check-api#readme",
   "dependencies": {
+    "@anatine/zod-nestjs": "^2.0.10",
+    "@anatine/zod-openapi": "^2.2.7",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.0.6",
+    "openapi3-ts": "^4.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "zod": "^3.24.2",
@@ -60,5 +58,11 @@
     "unplugin-swc": "^1.5.1",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.7"
+  },
+  "overrides": {
+    "@anatine/zod-nestjs": {
+      "@nestjs/common": "^11.0.0",
+      "@nestjs/swagger": "^11.0.0"
+    }
   }
 }
