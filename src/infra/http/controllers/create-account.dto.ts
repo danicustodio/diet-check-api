@@ -13,7 +13,7 @@ export const createAccountSchema = extendApi(
     email: z.string().email(),
     password: z
       .string()
-      .min(8, { message: 'Must have at least 1 character' })
+      .min(8, { message: 'Must have at least 8 character' })
       .regex(passwordValidation, {
         message:
           'Must have at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character',

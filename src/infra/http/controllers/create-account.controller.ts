@@ -1,4 +1,4 @@
-import { isLeft, isRight, unwrapEither } from '@/core/either'
+import { isRight, unwrapEither } from '@/core/either'
 // biome-ignore lint/style/useImportType: <explanation>
 import { NestCreateAccountUseCase } from '@/infra/nest-use-cases/nest-create-account'
 import {
@@ -48,6 +48,7 @@ export class CreateAccountController {
     if (isRight(result)) {
       return {
         message: 'Account created successfully',
+        statusCode: 201,
       }
     }
 
