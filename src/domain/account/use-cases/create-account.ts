@@ -1,54 +1,55 @@
-import { type Either, left, right } from '@/core/either'
-import { EntityError } from '@/core/errors'
+import { type Either, makeLeft, makeRight } from '@/core/either'
+import type { InvalidEmailError, InvalidNameError } from '@/core/errors'
 import { DuplicatedResourceError } from '@/core/errors/duplicated-resource-error'
+import type { HashGenerator } from '../cryptography/hash-generator'
 import { Account } from '../entities/account'
 import { Email } from '../entities/value-objects/email'
-import { Password } from '../entities/value-objects/password'
 import type { AccountRepository } from '../repositories/account-repository'
 
 interface AccountUseCaseRequest {
-	name: string
-	email: string
-	password: string
+  name: string
+  email: string
+  password: string
 }
 
 type AccountUseCaseResponse = Either<
-	DuplicatedResourceError | EntityError | Error,
-	{
-		account: Account
-	}
+  DuplicatedResourceError | InvalidNameError | InvalidEmailError,
+  {
+    account: Account
+  }
 >
 
 export class CreateAccountUseCase {
-	constructor(private readonly accountRepository: AccountRepository) {}
+  constructor(
+    private accountRepository: AccountRepository,
+    private hashGenerator: HashGenerator
+  ) {}
 
-	async execute({
-		email,
-		name,
-		password,
-	}: AccountUseCaseRequest): Promise<AccountUseCaseResponse> {
-		try {
-			const doesAccountExist = await this.accountRepository.findByEmail(email)
-			if (doesAccountExist) {
-				return left(new DuplicatedResourceError('Account already exists'))
-			}
+  async execute({
+    email,
+    name,
+    password,
+  }: AccountUseCaseRequest): Promise<AccountUseCaseResponse> {
+    try {
+      const doesAccountExist = await this.accountRepository.findByEmail(email)
+      if (doesAccountExist) {
+        return makeLeft(new DuplicatedResourceError('Account already exists'))
+      }
 
-			const account = Account.create({
-				email: new Email(email),
-				name,
-				password: new Password(password),
-			})
+      const hashedPassword = await this.hashGenerator.hash(password)
 
-			await this.accountRepository.create(account)
+      const account = Account.create({
+        email: new Email(email),
+        name,
+        password: hashedPassword,
+      })
 
-			return right({ account })
-		} catch (error) {
-			if (error instanceof EntityError) {
-				return left(error)
-			}
+      await this.accountRepository.create(account)
 
-			const typedError = error as Error
-			return left(typedError)
-		}
-	}
+      return makeRight({ account })
+    } catch (error) {
+      const typedError = error as Error
+      return makeLeft(typedError)
+    }
+  }
 }

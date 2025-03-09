@@ -1,42 +1,50 @@
-export type Either<L, R> = Left<L, R> | Right<L, R>
-
-/**
- * Represents a failure value.
- */
-class Left<L, R> {
-  readonly value: L
-
-  constructor(value: L) {
-    this.value = value
-  }
-
-  isLeft(): this is Left<L, R> {
-    return true
-  }
-
-  isRight(): this is Right<L, R> {
-    return false
-  }
+export type Left<T> = {
+  left: T
+  right?: never
 }
 
-/**
- * Represents a success value.
- */
-class Right<L, R> {
-  readonly value: R
-
-  constructor(value: R) {
-    this.value = value
-  }
-
-  isLeft(): this is Left<L, R> {
-    return false
-  }
-
-  isRight(): this is Right<L, R> {
-    return true
-  }
+export type Right<U> = {
+  left?: never
+  right: U
 }
 
-export const left = <L, R>(value: L): Either<L, R> => new Left(value)
-export const right = <L, R>(value: R): Either<L, R> => new Right(value)
+export type Either<T, U> = NonNullable<Left<T> | Right<U>>
+
+export const isLeft = <T, U>(e: Either<T, U>): e is Left<T> => {
+  return e.left !== undefined
+}
+
+export const isRight = <T, U>(e: Either<T, U>): e is Right<U> => {
+  return e.right !== undefined
+}
+
+export type UnwrapEither = <T, U>(e: Either<T, U>) => NonNullable<T | U>
+
+export const unwrapEither: UnwrapEither = <T, U>({
+  left,
+  right,
+}: Either<T, U>) => {
+  if (right !== undefined && left !== undefined) {
+    throw new Error(
+      `Received both left and right values at runtime when opening an Either\nLeft: ${JSON.stringify(
+        left
+      )}\nRight: ${JSON.stringify(right)}`
+    )
+  }
+
+  if (left !== undefined) {
+    return left as NonNullable<T>
+  }
+
+  if (right !== undefined) {
+    return right as NonNullable<U>
+  }
+
+  throw new Error(
+    'Received no left or right values at runtime when opening Either'
+  )
+}
+
+export const makeLeft = <T>(value: T): Left<T> => ({ left: value })
+
+export const makeRight = <U>(value: U): Right<U> => ({ right: value })
