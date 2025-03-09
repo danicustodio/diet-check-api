@@ -1,9 +1,11 @@
+import { envSchema } from '@/infra/env/env'
 import type { Config } from 'drizzle-kit'
+
+const config = envSchema.parse(process.env)
 
 export default {
   dbCredentials: {
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    url: process.env.DATABASE_URL!,
+    url: config.DATABASE_URL,
   },
   dialect: 'postgresql',
   schema: 'src/infra/database/drizzle/schemas/*',
