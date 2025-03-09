@@ -96,5 +96,4 @@ describe('Create Account Controller', () => {
       'Must have at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character'
     )
   })
-  it.skip('should hash the password when the account is created', () => {})
 })

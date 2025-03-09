@@ -1,6 +1,7 @@
 import { type Either, makeLeft, makeRight } from '@/core/either'
 import type { InvalidEmailError, InvalidNameError } from '@/core/errors'
 import { DuplicatedResourceError } from '@/core/errors/duplicated-resource-error'
+import type { HashGenerator } from '../cryptography/hash-generator'
 import { Account } from '../entities/account'
 import { Email } from '../entities/value-objects/email'
 import type { AccountRepository } from '../repositories/account-repository'
@@ -19,7 +20,10 @@ type AccountUseCaseResponse = Either<
 >
 
 export class CreateAccountUseCase {
-  constructor(private accountRepository: AccountRepository) {}
+  constructor(
+    private accountRepository: AccountRepository,
+    private hashGenerator: HashGenerator
+  ) {}
 
   async execute({
     email,
@@ -32,10 +36,12 @@ export class CreateAccountUseCase {
         return makeLeft(new DuplicatedResourceError('Account already exists'))
       }
 
+      const hashedPassword = await this.hashGenerator.hash(password)
+
       const account = Account.create({
         email: new Email(email),
         name,
-        password,
+        password: hashedPassword,
       })
 
       await this.accountRepository.create(account)
