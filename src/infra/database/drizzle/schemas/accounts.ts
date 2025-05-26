@@ -1,7 +1,5 @@
 import type { InferSelectModel } from 'drizzle-orm'
-import { text } from 'drizzle-orm/pg-core'
-import { timestamp } from 'drizzle-orm/pg-core'
-import { pgTable } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 import { uuidv7 } from 'uuidv7'
 
 export const accounts = pgTable('accounts', {
